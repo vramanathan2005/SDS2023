@@ -1,0 +1,83 @@
+---
+title: "R HW3"
+author: "Varun Ramanathan"
+date: "2023-09-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(kableExtra)
+library(tidyverse)
+principals <- as_tibble(read.csv('Homework3_principals.csv'))
+ratings <- as_tibble(read.csv('Homework3_ratings.csv')) 
+series <- as_tibble(read.csv('Homework3_tvSeries.csv'))
+```
+
+## R Markdown
+
+
+
+## Question 1:
+Create a tibble that contains all of the TV series that are no longer running (meaning they have an end year in the dataset).   Create a new variable in this tibble that is how many years each series ran and display the distribution. How many TV series in this dataset ended the same year as they started?
+
+```{r pressure, echo=FALSE}
+tvSeries <- filter(series, endYear != 'NA')
+tvSeries$Years <- tvSeries$endYear - tvSeries$startYear
+ggplot(tvSeries) +
+  geom_histogram(aes(x = Years)) +
+  labs(title = 'The Number Of Years TV Shows Aired', x = 'Number of Years Aired')
+summary(tvSeries$Years)
+```
+
+The # of years every series ran is skewed to the right. The number of years each series runs is also not symmetric. The median number of years each show runs is 0 years, meaning that the 1st quartile and 2nd quartile are from 0 to 0 (in other words, at least 50% of the shows aired for 0 years). The 3rd quartile is 1 year while the maximum is 8 years. Therefore, the maximum years a show is aired is 8 years.
+
+```{r}
+nrow(filter(tvSeries, Years == 0))
+```
+## Question 2:
+What proportion of the TV series have rating information?  Find the TV series with a rating of 9 or higher with at least 20,000 votes and print the series names, sorted alphabetically.
+
+```{r}
+TV = merge(series, ratings, all.x = TRUE, all.y = TRUE)
+nrow(filter(TV, averageRating != 'NA')) / nrow(TV)
+```
+The proportion of TV series that have rating information is 0.358067.
+```{r}
+upper_rating <- filter(TV, averageRating >= 9 & numVotes > 20000)
+sort(upper_rating$primaryTitle)
+```
+The TV series' that have an average rating above 9 are Arcane, Aspirants, Better Call Saul, Bleach: Thousand-Year Blood War, Clarkson's Farm, Kota Factory, NCR Days, Our Planet, Scam 1992: The Harshad Mehta Story, The Chosen, TVF Pitchers, and Yeh Meri Family.
+
+## Question 3:
+Calculate the ages of the principal cast and crew when each TV series started.  Compare the median ages for each category (i.e., actor, actress, writer, self) of principals at the start of these TV series.  Note: the "self" category denotes people playing themselves, e.g. reality TV shows.
+
+```{r}
+tvPrincipals <- merge(TV, principals, all.x = TRUE, all.y = TRUE)
+tvPrincipalsAge <- mutate(tvPrincipals, age = startYear - birthYear)
+ageTable = aggregate(age~category, tvPrincipalsAge, median)
+
+kable_styling(kbl(ageTable, colnames = c("Category", "Median Age")), full_width = FALSE)
+```
+The median age of actors across TV series' is 41. The median age of actresses across TV series' is 35. The median age of people playing themselves across TV series' is 44. The median age of writers across TV series' is 47.
+
+## Question 4
+Why did you choose the dataset you used for this project? What about the context of the data interested you?  Why did you choose the predictors you did? What did you expect to find in their relationships with the outcome variable.
+
+I chose this dataset for my project as I felt I would be able to accomplish the correlations between the categorical variables and integer or numerical variables, which provided an interesting challenge. I also am a avid coffee drinker, so I felt a personal connection to the dataset. I chose the predictor variables because I felt it would be perfect for predicting the outcome of the analysis. I thought I'd be able to find a correlation between the countries/regions and the amount of coffee beans grown. 
+
+## Question 5
+What challenges did you face while completing the assignment, and how did you overcome those challenges?  What do you plan to do differently next time as a result?  List at least one specific thing you learned about yourself as a data science student as a result.
+
+There were a number of other factors that could influence coffee rating, such as the country where the coffee is grown, the region detail, the processing method, and the bean color. However, I wasn't able to be consider in this analysis due to the variables being char instead of int or num. However, next time, I could find the mean of each boxplot and then compare those in place of finding a correlation coefficient. I learned that as a data science student, I've got a long way to go in terms of solving problems that confuse me.
+
+## Question 6
+Describe at least one way your personal background influenced how you analyzed this data or presented your analysis. What might someone else have done differently if analyzing the same dataset?
+
+The way that I usually analyze data, regardless of how useful the data is, I want every variable to be visualized on my file. Other data scientists might not have used every variable and specialized their analysis.
+
+
+
+
+

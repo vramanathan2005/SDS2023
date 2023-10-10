@@ -98,7 +98,7 @@ lepggplot + geom_point(aes(x = BeanColor, y = Rating), col = 'green', alpha = 0.
 
 ## Coffee Rating v Bags Produced
 ```{r}
-lepggplot + geom_point(aes(x = BagsProduced, y = Rating), col = 'green', alpha = 0.5) + labs(title= "Distribution of Coffee Ratings by Bags Produced", x = 'Bags Produced', y= "Coffee Rating")
+lepggplot + geom_point(aes(x = BagsProduced, y = Rating), col = 'blue', alpha = 0.5) + labs(title= "Distribution of Coffee Ratings by Bags Produced", x = 'Bags Produced', y= "Coffee Rating")
 cor(cofData$BagsProduced, cofData$Rating)
 ```
 There is a weak positive correlation between BagsProduced and Coffee Rating. The correlation coefficient is 0.02759721. As there are a multitude of other factors in coffee harvesting including the country, region detail, processing method, and more, that could be a reason for the weak correlation.

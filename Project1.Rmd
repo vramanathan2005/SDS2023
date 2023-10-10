@@ -1,0 +1,109 @@
+---
+title: "Project 1"
+author: "Varun Ramanathan"
+date: "2023-09-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r pressure, echo=FALSE}
+cofData <- read.csv('Project1_coffee.csv')
+library(ggplot2)
+lepggplot <- ggplot(cofData)
+```
+
+
+## Question 1
+Introduce your dataset and briefly describe the variables it contains, how it was collected, and any relevant background to give your reader context about the variables. Describe which variable is your chosen outcome and which predictors you will be investigating.  Include a picture (with citation) that relates to your analysis.
+
+The variable Country stores the country where the coffee was produced. The variable Region stores the region where the coffee was produced. The variable Altitude stores the altitude of the farm where the coffee was produced. The variable Year stores the year the coffee was produced. The variable ProccessingMethod stores the type of processing method used to prepare the coffee beans. The variable BeanColor stores the color of the coffee beans. The variable BagsProduced stores the number of bags of coffee produced from the sample. The variable Rating stores the average rating given to the coffee by a panel of coffee experts. My chosen outcome variable is the coffee rating. My predictor variables are country, region detail, altitude, year, processing method, bean color, and bags produced.
+
+![Coffee farmer harvesting coffee beans](/Users/varunramanathan/Downloads/harvesting3.jpg)
+The image to the left shows a coffee farmer harvesting [coffee beans](https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.coffeeresearch.org%2Fagriculture%2Fharvesting.htm&psig=AOvVaw3VZuzvt6ggjzkvJRZ_iVTK&ust=1695483454052000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCNC3g5rGvoEDFQAAAAAdAAAAABAE)
+
+“Harvesting Coffee Beans.” Coffee Research, www.coffeeresearch.org/agriculture/harvesting.htm. 
+
+
+## Question 2
+Describe the distribution of your outcome variable, using the appropriate statistics, and include a univariate graph to display its distribution. 
+
+```{r}
+lepggplot + geom_histogram(aes(x = Rating), col = 'green', fill = 'green', alpha = .5, bins = 30) + labs(title= "Distribution of Coffee Ratings", x = 'Coffee Rating', y= "Count")
+
+summary(cofData$Rating)
+
+```
+The summary statistics above shows that the lowest coffee rating in the data set is 59.83 while the highest coffee rating is 90.58. The median coffee rating is 82.50 and the mean coffee rating is 82.15. The coffee rating for the first quartile is 81.19 and the coffee rating for the third quartile is 83.65.
+
+The graph above shows that the data is skewed to the left. This means the tail of the distribution extends to the left, indicating most of the coffees harvested have ratings on the higher end than the lower end of the rating scale. This skewness is important to note as the mean is influenced by the skewness, so it's better to use the median to measure the center.
+
+## Question 3
+For each of your three predictors, create a relevant graph that shows its relationship with your outcome variable. Calculate any relevant bivariate statistics and briefly describe the relationships between each predictor and your outcome, referencing your graphs.
+
+## Coffee Rating v Country
+
+As Country is not a numeric variable, I will not be able to find the correlation between the Coffee Rating and Country. However, below is the graph showing the Distribution of Coffee Ratings by Country.
+
+```{r}
+lepggplot + geom_point(aes(x = Country, y = Rating), col = 'green', alpha = 0.25) + labs(title= "Distribution of Coffee Ratings by Country", x = 'Country', y= "Coffee Rating")+theme(axis.text.x = element_text(angle = 45))
+
+```
+
+## Coffee Rating v Region Detail
+
+As Region Detail is not a numeric variable, I will not be able to find the correlation between the Coffee Rating and Region Detail However, below is the graph showing the Distribution of Coffee Ratings by Region Detail. The x-axis has too many regions, which causes the graph to not help with our analysis.
+
+```{r}
+lepggplot + geom_point(aes(x = RegionDetail, y = Rating), col = 'green', alpha = 0.25) + labs(title= "Distribution of Coffee Ratings by Region Detail", x = 'Region Detail', y= "Coffee Rating") + theme_classic()
+
+```
+
+
+## Coffee Rating v Altitude
+```{r}
+lepggplot + geom_point(aes(x = Altitude, y = Rating), col = 'green', alpha = 0.5) + labs(title= "Distribution of Coffee Ratings by Altitude", x = 'Altitude', y= "Coffee Rating")
+cor(cofData$Altitude, cofData$Rating)
+```
+There is a weak positive correlation between Altitude and Coffee Rating. The correlation coefficient is 0.1732569. As there are a multitude of other factors in coffee harvesting including the country, year, processing method, and more, that could be a reason for the weak correlation.
+
+## Coffee Rating v Year 
+
+```{r}
+lepggplot + geom_point(aes(x = Year, y = Rating), col = 'green', alpha = 0.5) + labs(title= "Distribution of Coffee Ratings by Year", x = 'Year', y= "Coffee Rating")
+cor(cofData$Year, cofData$Rating)
+```
+There is a weak positive correlation between Year and Coffee Rating. The correlation coefficient is 0.09211512 As there are a multitude of other factors in coffee harvesting including the country, processing method, and more, that could be a reason for the weak correlation.
+
+
+
+## Coffee Rating v Processing Method
+
+As Processing Method is not a numeric variable, I will not be able to find the correlation between the Coffee Rating and Processing Method However, below is the graph showing the Distribution of Coffee Ratings by Processing Method.
+
+
+```{r}
+lepggplot + geom_point(aes(x = ProcessingMethod, y = Rating), col = 'green', alpha = 0.25) + labs(title= "Distribution of Coffee Ratings by Processing Method", x = 'Processing Method', y= "Coffee Rating") + theme_classic()
+```
+## Coffee Rating v Bean Color
+
+As Bean Color is not a numeric variable, I will not be able to find the correlation between the Coffee Rating and Bean Color, below is the graph showing the Distribution of Coffee Ratings by Bean Color.
+
+
+```{r}
+lepggplot + geom_point(aes(x = BeanColor, y = Rating), col = 'green', alpha = 0.25) + labs(title= "Distribution of Coffee Ratings by Bean Color", x = 'Bean Color', y= "Coffee Rating")
+```
+
+## Coffee Rating v Bags Produced
+```{r}
+lepggplot + geom_point(aes(x = BagsProduced, y = Rating), col = 'green', alpha = 0.5) + labs(title= "Distribution of Coffee Ratings by Bags Produced", x = 'Bags Produced', y= "Coffee Rating")
+cor(cofData$BagsProduced, cofData$Rating)
+```
+There is a weak positive correlation between BagsProduced and Coffee Rating. The correlation coefficient is 0.02759721. As there are a multitude of other factors in coffee harvesting including the country, region detail, processing method, and more, that could be a reason for the weak correlation.
+
+## Question 4
+
+The results of this analysis show that there is a weak positive correlation between coffee rating and altitude, year, and bags produced. However, the correlation coefficients are all very small, indicating that the relationships between these variables and coffee rating are not very strong.
+There are a number of other factors that could influence coffee rating, such as the country where the coffee is grown, the region detail, the processing method, and the bean color. However, these factors were ultimately not able to be considered in this analysis due to the variables being char instead of int or num, so it is possible that they could explain more of the variation in coffee rating than the factors that were considered. Future research could further investigate other factors that could influence coffee rating, inlcuding country, region detail, and processing method. If we were to assign each country, each region, or each color a number, we would have been able to factor in those variables in our analysis. Future research could also investigate the relationship between coffee rating and multiple predictor variables at the same time, using multivariate regression analysis.  All data was gathered from the [Coffee Quality Database](https://github.com/jldbc/coffee-quality-database) on [this page](https://corgis-edu.github.io/corgis/csv/coffee/).
